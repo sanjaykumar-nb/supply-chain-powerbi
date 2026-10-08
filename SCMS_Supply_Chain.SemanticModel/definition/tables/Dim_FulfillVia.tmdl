@@ -1,0 +1,23 @@
+table Dim_FulfillVia
+	lineageTag: 63f3bfe7-3359-5d1c-8a0c-21ee0f9c2dea
+
+	column 'Fulfill Via'
+		dataType: string
+		lineageTag: b3926277-dc70-5325-9855-d51c328722f6
+		summarizeBy: none
+		sourceColumn: Fulfill Via
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_FulfillVia-2a6bc643-7904-5815-8b02-1e9f8f48f18e = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"Kept Columns" = Table.SelectColumns(Source, {"Fulfill Via"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Kept Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+

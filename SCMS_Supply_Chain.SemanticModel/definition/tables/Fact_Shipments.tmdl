@@ -1,0 +1,285 @@
+table Fact_Shipments
+	lineageTag: 011e0fa7-4ebb-5e46-a6dd-65f153652a32
+
+	measure Shipments = COUNTROWS ( Fact_Shipments )
+		formatString: #,0
+		lineageTag: 6ae5364f-91ff-567c-9e1f-4cf45f215c3f
+
+	measure 'Late Shipments' = CALCULATE ( [Shipments], Fact_Shipments[Days vs Schedule] > 0 )
+		formatString: #,0
+		lineageTag: cf1ec64d-fbfe-5506-9185-026c09b3ec5c
+
+	measure '% Late vs Schedule' = DIVIDE ( [Late Shipments] + 0, [Shipments] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 01f810df-bebc-5cc3-adb2-ad1e35d57c01
+
+	measure 'Avg Days Late' =
+			CALCULATE (
+			    AVERAGE ( Fact_Shipments[Days vs Schedule] ),
+			    Fact_Shipments[Days vs Schedule] > 0
+			)
+		formatString: #,0.0
+		lineageTag: f50ce813-c816-5fda-a99e-d228f84f8c61
+
+	measure 'Avg PO to Delivery Days' = AVERAGE ( Fact_Shipments[PO to Delivery Days] )
+		formatString: #,0.0
+		lineageTag: 5fea1efa-7aa0-5255-8bc6-aa68c1ecd1f7
+
+	measure 'Median PO to Delivery Days' = MEDIAN ( Fact_Shipments[PO to Delivery Days] )
+		formatString: #,0
+		lineageTag: 6c5e1f4b-01ca-548a-9f54-0704f3280dd3
+
+	measure 'Freight Cost (USD)' = SUM ( Fact_Shipments[Freight Cost USD] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 58541c6c-1c81-57de-8167-a512075606d2
+
+	measure 'Weight (kg)' = SUM ( Fact_Shipments[Weight kg] )
+		formatString: #,0
+		lineageTag: 74586d41-a546-5fec-8a75-a0f4c1039bfc
+
+	measure 'Freight per kg (USD)' =
+			DIVIDE (
+			    CALCULATE ( SUM ( Fact_Shipments[Freight Cost USD] ), Fact_Shipments[Has Freight and Weight] = TRUE () ),
+			    CALCULATE ( SUM ( Fact_Shipments[Weight kg] ), Fact_Shipments[Has Freight and Weight] = TRUE () )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 0b205d8e-3422-5a85-92f6-559d40b4daf2
+
+	measure 'Freight % of Value' =
+			DIVIDE (
+			    [Freight Cost (USD)],
+			    CALCULATE (
+			        SUM ( Fact_Shipments[Shipment Value USD] ),
+			        NOT ISBLANK ( Fact_Shipments[Freight Cost USD] )
+			    )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a73507b7-37a7-52a1-922f-937fa0db2b2b
+
+	measure '% Freight Not Recorded' =
+			DIVIDE (
+			    CALCULATE ( [Shipments], Fact_Shipments[Freight Status] <> "Recorded" ),
+			    [Shipments]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 8a5f907d-467f-5911-ab32-655ad156740a
+
+	measure '% Weight Not Recorded' =
+			DIVIDE (
+			    CALCULATE ( [Shipments], Fact_Shipments[Weight Status] <> "Recorded" ),
+			    [Shipments]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: faed9bf9-394c-52e5-a8de-b71aab0676ee
+
+	measure '% Late (Vendors 50+ Shipments)' = IF ( [Shipments] >= 50, [% Late vs Schedule] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e37448bf-af8c-5f13-a7a1-e2e3fdc3a736
+
+	measure '% Late (Countries 100+ Shipments)' = IF ( CALCULATE ( [Shipments], REMOVEFILTERS ( Dim_Date ) ) >= 100, [% Late vs Schedule] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fe39ad33-4f04-5dd8-8a5a-475cd2eebee8
+
+	measure 'Freight % of Value (Top 10 Freight Countries)' =
+			VAR CountryRank =
+			    RANKX ( ALLSELECTED ( Dim_Country[Country] ), [Freight Cost (USD)],, DESC )
+			RETURN
+			    IF ( CountryRank <= 10, [Freight % of Value] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2d455071-4b80-5abd-9d22-6c5d86f7f619
+
+	column 'ASN/DN #'
+		dataType: string
+		lineageTag: f1812259-df14-5fc3-aaa8-cb67d3670227
+		summarizeBy: none
+		sourceColumn: ASN/DN #
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		isHidden
+		lineageTag: f521d4d7-c32d-5c6d-a75f-67ef281f4908
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vendor
+		dataType: string
+		isHidden
+		lineageTag: 4d1c4b9f-59b2-555c-8aaf-c844d0075d9f
+		summarizeBy: none
+		sourceColumn: Vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fulfill Via'
+		dataType: string
+		isHidden
+		lineageTag: 990f01d9-7eac-5043-9eda-de0036b522f6
+		summarizeBy: none
+		sourceColumn: Fulfill Via
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vendor INCO Term'
+		dataType: string
+		lineageTag: 355993e4-ae8d-5f28-a3d0-ee369a3200d9
+		summarizeBy: none
+		sourceColumn: Vendor INCO Term
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Shipment Mode'
+		dataType: string
+		isHidden
+		lineageTag: 42162bde-5f6e-511b-b97f-c51a03f2a5dc
+		summarizeBy: none
+		sourceColumn: Shipment Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Managed By'
+		dataType: string
+		lineageTag: 7e167b39-2447-5f6f-b56c-6d1ed4f167ad
+		summarizeBy: none
+		sourceColumn: Managed By
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO Sent to Vendor Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 6fc9e80c-9ccf-5ee9-8682-f45337753c22
+		summarizeBy: none
+		sourceColumn: PO Sent to Vendor Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Scheduled Delivery Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 59c5f99e-bf6f-5f62-9723-54ad6fed0c2c
+		summarizeBy: none
+		sourceColumn: Scheduled Delivery Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Delivered to Client Date'
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 69025980-e381-5cb6-a2c2-256f3092a7f7
+		summarizeBy: none
+		sourceColumn: Delivered to Client Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Weight kg'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: ec03868d-f772-5f19-b6ee-c4b5e0744caa
+		summarizeBy: sum
+		sourceColumn: Weight kg
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Freight Cost USD'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: e46bc540-098a-5cc1-aa7f-fbce81f6849c
+		summarizeBy: sum
+		sourceColumn: Freight Cost USD
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Freight Status'
+		dataType: string
+		lineageTag: a228804b-c951-56ca-8010-4f37471a6d9a
+		summarizeBy: none
+		sourceColumn: Freight Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Weight Status'
+		dataType: string
+		lineageTag: 4f80d50e-f46c-5f0b-a96e-5af4b5b141c5
+		summarizeBy: none
+		sourceColumn: Weight Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Days vs Schedule'
+		dataType: int64
+		formatString: 0
+		lineageTag: 560ce56a-ed55-50d5-8f4b-dddf2828d31a
+		summarizeBy: none
+		sourceColumn: Days vs Schedule
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO to Delivery Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 63fecf23-e728-5543-aa04-21dc50b98b89
+		summarizeBy: none
+		sourceColumn: PO to Delivery Days
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Delivery Status'
+		dataType: string
+		lineageTag: 5a626a77-bc32-56d9-8422-2fc5298234a2
+		summarizeBy: none
+		sourceColumn: Delivery Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Freight and Weight'
+		dataType: boolean
+		lineageTag: 4f80587f-0428-5b21-aab9-3b6ea307ae4d
+		summarizeBy: none
+		sourceColumn: Has Freight and Weight
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Shipment Value USD'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 082f8250-74ff-5971-9140-033f1a66495f
+		summarizeBy: sum
+		sourceColumn: Shipment Value USD
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Shipments-fc929d5a-e411-5390-9e84-ffcdcb836db0 = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"First Lines" = Table.SelectRows(Source, each [First Line Designation] = "Yes"),
+				    #"Kept Columns" = Table.SelectColumns(#"First Lines", {"ASN/DN #", "Country", "Vendor", "Fulfill Via", "Vendor INCO Term", "Shipment Mode", "Managed By", "PO Sent to Vendor Date", "Scheduled Delivery Date", "Delivered to Client Date", "Weight (Kilograms)", "Freight Cost (USD)"}),
+				    #"Added Freight Status" = Table.AddColumn(#"Kept Columns", "Freight Status", each if Text.StartsWith([#"Freight Cost (USD)"], "Freight Included") then "Included in commodity cost" else if [#"Freight Cost (USD)"] = "Invoiced Separately" then "Invoiced separately" else "Recorded", type text),
+				    #"Added Weight Status" = Table.AddColumn(#"Added Freight Status", "Weight Status", each if [#"Weight (Kilograms)"] = "Weight Captured Separately" then "Captured separately" else "Recorded", type text),
+				    #"To Numbers" = Table.TransformColumns(#"Added Weight Status", {{"Freight Cost (USD)", each try Number.FromText(_, "en-US") otherwise null, type nullable number}, {"Weight (Kilograms)", each try Number.FromText(_, "en-US") otherwise null, type nullable number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"To Numbers", {{"Freight Cost (USD)", "Freight Cost USD"}, {"Weight (Kilograms)", "Weight kg"}}),
+				    #"Added Days vs Schedule" = Table.AddColumn(#"Renamed Columns", "Days vs Schedule", each Duration.Days([Delivered to Client Date] - [Scheduled Delivery Date]), Int64.Type),
+				    #"Added PO to Delivery Days" = Table.AddColumn(#"Added Days vs Schedule", "PO to Delivery Days", each if [PO Sent to Vendor Date] = null then null else Duration.Days([Delivered to Client Date] - [PO Sent to Vendor Date]), Int64.Type),
+				    #"Added Delivery Status" = Table.AddColumn(#"Added PO to Delivery Days", "Delivery Status", each if [Days vs Schedule] > 0 then "Late" else if [Days vs Schedule] = 0 then "On schedule" else "Early", type text),
+				    #"Added Has Freight and Weight" = Table.AddColumn(#"Added Delivery Status", "Has Freight and Weight", each [Freight Cost USD] <> null and [Weight kg] <> null and [Weight kg] > 0, type logical),
+				    #"Shipment Values" = Table.Group(Source, {"ASN/DN #"}, {{"Shipment Value USD", each List.Sum([Line Item Value]), type number}}),
+				    #"Merged Shipment Value" = Table.NestedJoin(#"Added Has Freight and Weight", {"ASN/DN #"}, #"Shipment Values", {"ASN/DN #"}, "SV", JoinKind.LeftOuter),
+				    #"Expanded Shipment Value" = Table.ExpandTableColumn(#"Merged Shipment Value", "SV", {"Shipment Value USD"}, {"Shipment Value USD"}),
+				    #"Typed Shipment Value" = Table.TransformColumnTypes(#"Expanded Shipment Value", {{"Shipment Value USD", type number}})
+				in
+				    #"Typed Shipment Value"
+
+	annotation PBI_ResultType = Table
+

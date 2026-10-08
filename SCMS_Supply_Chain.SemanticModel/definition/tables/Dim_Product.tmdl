@@ -1,0 +1,71 @@
+table Dim_Product
+	lineageTag: cd18f44d-1927-5bc8-ab3b-5a8b6cb79bda
+
+	column 'Item Description'
+		dataType: string
+		lineageTag: 51b98d92-5593-5e7a-a368-4684f15c11fa
+		summarizeBy: none
+		sourceColumn: Item Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Group'
+		dataType: string
+		lineageTag: 82233f57-97e4-5453-841a-71d345d1d065
+		summarizeBy: none
+		sourceColumn: Product Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Classification'
+		dataType: string
+		lineageTag: 0cf17121-2138-52db-887c-6c40e54ddc3b
+		summarizeBy: none
+		sourceColumn: Sub Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Molecule/Test Type'
+		dataType: string
+		lineageTag: 93662d06-dd53-5a8a-9d73-b692e50b7c7a
+		summarizeBy: none
+		sourceColumn: Molecule/Test Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: fe6cedbd-a5d4-5110-b414-95ccb00e0075
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dosage
+		dataType: string
+		lineageTag: 978516be-5405-514f-a3c7-fbb0669c0e43
+		summarizeBy: none
+		sourceColumn: Dosage
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dosage Form'
+		dataType: string
+		lineageTag: 971637f1-0ce2-5960-bf44-41a09dacfe55
+		summarizeBy: none
+		sourceColumn: Dosage Form
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product-5159d62f-9d5b-5761-a6ac-aed80e9a0ffd = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"Kept Columns" = Table.SelectColumns(Source, {"Item Description", "Product Group", "Sub Classification", "Molecule/Test Type", "Brand", "Dosage", "Dosage Form"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Kept Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+

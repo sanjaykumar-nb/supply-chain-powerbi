@@ -1,0 +1,23 @@
+table Dim_Country
+	lineageTag: 83848514-7c59-50b2-b332-e01dccad42c3
+
+	column Country
+		dataType: string
+		lineageTag: 8a981f0d-830f-58fe-9e4a-adaf3a45fb0d
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Country-e67e071e-7fee-56d1-bc32-0f9c160250c2 = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"Kept Columns" = Table.SelectColumns(Source, {"Country"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Kept Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,342 @@
+table Fact_LineItems
+	lineageTag: b3df6488-194b-5e67-b9bb-0378d17c4a78
+
+	measure 'Line Items' = COUNTROWS ( Fact_LineItems )
+		formatString: #,0
+		lineageTag: 53fc434f-7a79-5aaa-9e41-c3914fb8903b
+
+	measure 'Commodity Value (USD)' = SUM ( Fact_LineItems[Line Item Value] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: b726fa71-15ac-5725-9d6d-c98750a4afc6
+
+	measure 'Packs Delivered' = SUM ( Fact_LineItems[Line Item Quantity] )
+		formatString: #,0
+		lineageTag: 36b66210-ded3-507d-9353-ee981cd755b9
+
+	measure 'Commodity Value Top 10 Countries' =
+			VAR CountryRank =
+			    RANKX ( ALLSELECTED ( Dim_Country[Country] ), [Commodity Value (USD)],, DESC )
+			RETURN
+			    IF ( CountryRank <= 10, [Commodity Value (USD)] )
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: a3d24a55-7a00-567c-8119-7fa7c4154389
+
+	column ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 13632234-97ca-5984-a29b-b5d9b7108773
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Project Code'
+		dataType: string
+		lineageTag: 372bb39d-d6a9-5fb6-aad0-51ff80df66db
+		summarizeBy: none
+		sourceColumn: Project Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PQ #'
+		dataType: string
+		lineageTag: aa60ed0b-34c3-57bb-8e16-b42a09883515
+		summarizeBy: none
+		sourceColumn: PQ #
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO / SO #'
+		dataType: string
+		lineageTag: 4cacf707-25cf-5fc8-9844-b3aa2fad1063
+		summarizeBy: none
+		sourceColumn: PO / SO #
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ASN/DN #'
+		dataType: string
+		lineageTag: 944a9197-c7a9-5312-930f-d4b4097316c7
+		summarizeBy: none
+		sourceColumn: ASN/DN #
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		isHidden
+		lineageTag: ba6fb7b1-1c5e-5b1f-8314-fa070fe09761
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Managed By'
+		dataType: string
+		lineageTag: 20b2c28d-d32b-5231-9abc-bc7873796a95
+		summarizeBy: none
+		sourceColumn: Managed By
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fulfill Via'
+		dataType: string
+		isHidden
+		lineageTag: a3fde69f-5870-5664-9806-f5a5d1f1dc9d
+		summarizeBy: none
+		sourceColumn: Fulfill Via
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vendor INCO Term'
+		dataType: string
+		lineageTag: 9608dd9a-cf53-5790-81f8-592655febec3
+		summarizeBy: none
+		sourceColumn: Vendor INCO Term
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Shipment Mode'
+		dataType: string
+		isHidden
+		lineageTag: 70015aa2-9dbe-5195-b241-fba060144abb
+		summarizeBy: none
+		sourceColumn: Shipment Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PQ First Sent to Client Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: abf5e7e0-33c4-5c7a-8fea-97cd88f2b76c
+		summarizeBy: none
+		sourceColumn: PQ First Sent to Client Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'PO Sent to Vendor Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 75d10e7d-c621-54a6-bc12-134e9ef10e3a
+		summarizeBy: none
+		sourceColumn: PO Sent to Vendor Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Scheduled Delivery Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 030235b1-670c-5824-8c82-8d3432768e85
+		summarizeBy: none
+		sourceColumn: Scheduled Delivery Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Delivered to Client Date'
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: 779a1404-2af7-5c6b-9a35-3451352d2a17
+		summarizeBy: none
+		sourceColumn: Delivered to Client Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Delivery Recorded Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 6f58af68-734c-5ae3-b36d-5a13ac57a360
+		summarizeBy: none
+		sourceColumn: Delivery Recorded Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Product Group'
+		dataType: string
+		lineageTag: 5020cd0a-97e1-5f53-85b3-99db3c2f7f64
+		summarizeBy: none
+		sourceColumn: Product Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Classification'
+		dataType: string
+		lineageTag: feef92a7-8a3c-5c7d-bf88-eb84b576fa01
+		summarizeBy: none
+		sourceColumn: Sub Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vendor
+		dataType: string
+		isHidden
+		lineageTag: 1e452a02-16ea-5554-b74e-a07f7a4ddadc
+		summarizeBy: none
+		sourceColumn: Vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Item Description'
+		dataType: string
+		isHidden
+		lineageTag: cd33ae18-ff94-59a7-bf95-2e64e2b50cb5
+		summarizeBy: none
+		sourceColumn: Item Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Molecule/Test Type'
+		dataType: string
+		lineageTag: 5f7a3d40-d771-51b4-b1e4-7f6fa4618245
+		summarizeBy: none
+		sourceColumn: Molecule/Test Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: f4ecd6dd-d6f8-5b5a-8e8d-248fa77abc55
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dosage
+		dataType: string
+		lineageTag: 9e206c9d-e00d-54c7-9eda-7e95da90e7ec
+		summarizeBy: none
+		sourceColumn: Dosage
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dosage Form'
+		dataType: string
+		lineageTag: fcfe36dd-b06d-5394-9d13-78bee99a4c7b
+		summarizeBy: none
+		sourceColumn: Dosage Form
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit of Measure (Per Pack)'
+		dataType: int64
+		formatString: 0
+		lineageTag: a0fd971d-746a-5f6c-8783-0ab68fd54597
+		summarizeBy: none
+		sourceColumn: Unit of Measure (Per Pack)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Line Item Quantity'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7335d9b0-22f8-5614-9648-e38b14bd7146
+		summarizeBy: none
+		sourceColumn: Line Item Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Line Item Value'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 5f3771ab-eaa6-56d1-b438-b30f11bb9e3f
+		summarizeBy: sum
+		sourceColumn: Line Item Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pack Price'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: cd1144b5-8591-5f31-ad2d-634b750fd313
+		summarizeBy: none
+		sourceColumn: Pack Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Price'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 016e4d46-4d57-517b-858b-ff26e937afd0
+		summarizeBy: none
+		sourceColumn: Unit Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manufacturing Site'
+		dataType: string
+		lineageTag: a9e51d68-f3a3-567a-8239-ca50a32c17fa
+		summarizeBy: none
+		sourceColumn: Manufacturing Site
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Line Designation'
+		dataType: string
+		lineageTag: f0a2bd8b-ceff-594a-883b-45c96c7490d9
+		summarizeBy: none
+		sourceColumn: First Line Designation
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Weight (Kilograms)'
+		dataType: string
+		isHidden
+		lineageTag: a910f91a-ac80-56aa-af7b-ebb3a136c052
+		summarizeBy: none
+		sourceColumn: Weight (Kilograms)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Freight Cost (USD)'
+		dataType: string
+		isHidden
+		lineageTag: ed08fc9d-d316-5a05-83ce-c9c0fd691b88
+		summarizeBy: none
+		sourceColumn: Freight Cost (USD)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Line Item Insurance (USD)'
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 7a61898f-ec07-58b6-99ad-fd73fbd94b30
+		summarizeBy: sum
+		sourceColumn: Line Item Insurance (USD)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO Date Status'
+		dataType: string
+		lineageTag: 8b9e52c5-efa3-5d37-b966-2cd9ce6ce213
+		summarizeBy: none
+		sourceColumn: PO Date Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_LineItems-3b1d934e-44a2-526d-abb6-4eb9f5b3b4bb = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "SCMS_Delivery_History_Dataset.csv"), [Delimiter = ",", Columns = 33, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    #"Added PO Date Status" = Table.AddColumn(#"Promoted Headers", "PO Date Status", each if [PO Sent to Vendor Date] = "N/A - From RDC" then "Not applicable (RDC)" else if [PO Sent to Vendor Date] = "Date Not Captured" then "Not captured" else "Captured", type text),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added PO Date Status", {{"ID", Int64.Type}, {"Unit of Measure (Per Pack)", Int64.Type}, {"Line Item Quantity", Int64.Type}, {"Line Item Value", type number}, {"Pack Price", type number}, {"Unit Price", type number}, {"Line Item Insurance (USD)", type number}}, "en-US"),
+				    #"Parsed Delivery Dates" = Table.TransformColumns(#"Changed Type", {{"Scheduled Delivery Date", each Date.FromText(_, [Format = "d-MMM-yy", Culture = "en-US"]), type date}, {"Delivered to Client Date", each Date.FromText(_, [Format = "d-MMM-yy", Culture = "en-US"]), type date}, {"Delivery Recorded Date", each Date.FromText(_, [Format = "d-MMM-yy", Culture = "en-US"]), type date}}),
+				    #"Parsed Order Dates" = Table.TransformColumns(#"Parsed Delivery Dates", {{"PQ First Sent to Client Date", each try Date.FromText(_, [Format = "M/d/yy", Culture = "en-US"]) otherwise null, type nullable date}, {"PO Sent to Vendor Date", each try Date.FromText(_, [Format = "M/d/yy", Culture = "en-US"]) otherwise null, type nullable date}}),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Parsed Order Dates", {{"Line Item Insurance (USD)", null}}),
+				    #"Replaced Mode" = Table.ReplaceValue(#"Replaced Errors", "N/A", "Not recorded", Replacer.ReplaceValue, {"Shipment Mode"})
+				in
+				    #"Replaced Mode"
+
+	annotation PBI_ResultType = Table
+

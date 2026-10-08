@@ -1,0 +1,25 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DataFolder", "Fact_LineItems", "Fact_Shipments", "Dim_Country", "Dim_Vendor", "Dim_ShipmentMode", "Dim_FulfillVia", "Dim_Product"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Fact_LineItems
+ref table Fact_Shipments
+ref table Dim_Country
+ref table Dim_Vendor
+ref table Dim_ShipmentMode
+ref table Dim_FulfillVia
+ref table Dim_Product
+ref table Dim_Date
+
+ref cultureInfo en-US
+

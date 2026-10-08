@@ -1,0 +1,34 @@
+ID,FieldName,FieldDescription,FieldNotes,DataType
+1,ID,Primary key indentifer of the line of data in our analytical tool,,Number
+2,Project Code,Project code,Only includes PEPFAR project codes,Text
+3,PQ #,Price quote (PQ) number,"""Pre-PQ Process"" indicates deliveries that occurred before the PQ process was put in place in mid-2009.",Text
+4,PO #,"Order number: Purchase order (PO) for Direct Drop deliveries, or Sales Order (SO) for from Regional Delivery Center (RDC) deliveries","PO # is not applicable for from RDC deliveries (""NA - From RDC"")",Text
+5,ASN/DN #,"Shipment number: Advanced Shipment Note (ASN) for Direct Drop deliveries, or Delivery Note (DN) for from RDC deliveries",,Text
+6,Country,Destination country,,Text
+7,Managed By,SCMS managing office: either the Program Management Office (PMO) in the U.S. or the relevant SCMS field office,,Text
+8,Fulfill Via,Method through which the shipment was fulfilled: via Direct Drop from vendor or from stock available in the RDCs,,Text
+9,Vendor INCO Term,The vendor INCO term (also known as International Commercial Terms) for Direct Drop deliveries,"Not applicable for from RDC deliveries (""NA - From RDC"")",Text
+10,Shipment Mode,Method by which commodities are shipped,,Text
+11,PQ First Sent to Client Date,Date the PQ is first sent to the client,"""Pre-PQ Process"" indicates deliveries that occurred before the PQ process was put in place in mid-2009.  ""Date Not Captured"" where date was not captured.",Date/Time
+12,PO Sent to Vendor Date,Date the PO is first sent to the vendor,"Not applicable for from RDC deliveries (""NA - From RDC""). ""Date Not Captured"" where date was not captured.",Date/Time
+13,Scheduled Delivery Date,Current anticipated delivery date,This date is not equivalent to the client promised delivery date and should not be used to determine on-time perform.,Date/Time
+14,Delivered to Client Date,Date of delivery to client,Transactions are included in the dataset only after the goods have been delivered to the client,Date/Time
+15,Delivery Recorded Date,Date on which delivery to client was recorded in SCMS information systems,This date is used for official SCMS reporting. Deliveries are only recorded in SCMS systems once all necessary documentation has been received. Due to documentation delays there can be a lag between the time goods are physically delivered to the client and the date on which all necessary documentation has been received. ,
+16,Product Group,"Product group for item, i.e. ARV, HRDT","ACT, ANTM, ARV, HRDT, MRDT only",Text
+17,Sub Classification,"Identifies relevant product sub classifications, such as whether ARVs are pediatric or adult, whether a malaria product is an artemisinin-based combination therapy (ACT), etc.",,Text
+18,Vendor,Vendor name,"SCMS is the vendor for from RDC deliveries (product can be from multiple manufacturers, based on available stock)",Text
+19,Item Description,Product name and formulation from Partnership for Supply Chain Management (PFSCM) Item Master,,Text
+20,Molecule/Test Type,Active drug(s) or test kit type,,Text
+21,Brand,Generic or branded name for the item,,Text
+22,Dosage,Item dosage and unit,,Text
+23,Dosage Form,"Dosage form for the item (tablet, oral solution, injection, etc.). ","""FDC"" denotes if the item contains a fixed-dose combination (FDC) formulation. ""Blister"" denotes if the item is presented in blister packaging. ""Co-blister"" denotes when the item contains more than one product packaged together in blister packaging.",Text
+24,Unit of Measure (Per Pack),Pack quantity (pills or test kits) used to compute unit price,,Number
+25,Line Item Quantity,Total quantity (packs) of commodity per line item,,Number
+26,Line Item Value,Total value of commodity per line item,,Currency (USD)
+27,Pack Price,"Cost per pack (i.e. month's supply of ARVs, pack of 60 test kits)",,Currency (USD)
+28,Unit Price,Cost per pill (for drugs) or per test (for test kits),,Currency (USD)
+29,Manufacturing Site,Identifies manufacturing site for the line item for direct drop and from RDC deliveries,,Text
+30,First Line Designation,Designates if the line in question shows the aggregated freight costs and weight associated with all items on the ASN/DN ,There may or may not be other associated lines with each ASN/DN,Binary
+31,Weight (Kilograms),Weight for all lines on an ASN/DN,Present only for FirstLine designated lines,Number
+32,Freight Cost (USD),Freight charges associated with all lines on the respective ASN/DN,"Present only for FirstLine designated lines. For C- and D-vendor INCO term deliveries, freight costs may be included in the unit price for the commodities as indicated by ""Freight Included in Commodity Price"". All other lines are ""Invoiced Separately""",Currency (USD)
+33,Line Item Insurance (USD),"Line item cost of insurance, created by applying an annual flat rate (%) to commodity cost",Pre 6/1/2009 lines are still under analysis for correct rates because they do not have PQs and cannot be computed in the same way that they currently are across the partnership,Currency (USD)

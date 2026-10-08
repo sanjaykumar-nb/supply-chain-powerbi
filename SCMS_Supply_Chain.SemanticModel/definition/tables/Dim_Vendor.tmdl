@@ -1,0 +1,23 @@
+table Dim_Vendor
+	lineageTag: e275acb5-056e-59ca-a71f-4c475055414d
+
+	column Vendor
+		dataType: string
+		lineageTag: bb5d53f6-8fa6-5c51-89ad-4c658aa9b21a
+		summarizeBy: none
+		sourceColumn: Vendor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Vendor-1f9a5e7f-bdd3-531c-91fc-66820941f96d = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"Kept Columns" = Table.SelectColumns(Source, {"Vendor"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Kept Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+

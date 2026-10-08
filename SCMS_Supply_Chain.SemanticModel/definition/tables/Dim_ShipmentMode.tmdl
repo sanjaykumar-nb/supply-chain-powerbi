@@ -1,0 +1,23 @@
+table Dim_ShipmentMode
+	lineageTag: 0ba3b16a-b4e7-5800-bda8-e6b95e481366
+
+	column 'Shipment Mode'
+		dataType: string
+		lineageTag: 796a68a2-8edc-5f2a-aaaf-55f933f21e4d
+		summarizeBy: none
+		sourceColumn: Shipment Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_ShipmentMode-f3339ab3-a848-59fa-9b7b-645a9785647b = m
+		mode: import
+		source =
+				let
+				    Source = Fact_LineItems,
+				    #"Kept Columns" = Table.SelectColumns(Source, {"Shipment Mode"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Kept Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "dl_table_route",
+  "position": {
+    "x": 20,
+    "y": 388,
+    "z": 3000,
+    "height": 150,
+    "width": 400,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_FulfillVia"
+                    }
+                  },
+                  "Property": "Fulfill Via"
+                }
+              },
+              "queryRef": "Dim_FulfillVia.Fulfill Via",
+              "displayName": "Route"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact_Shipments"
+                    }
+                  },
+                  "Property": "Shipments"
+                }
+              },
+              "queryRef": "Fact_Shipments.Shipments",
+              "displayName": "Shipments"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact_Shipments"
+                    }
+                  },
+                  "Property": "% Late vs Schedule"
+                }
+              },
+              "queryRef": "Fact_Shipments.% Late vs Schedule",
+              "displayName": "% late"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact_Shipments"
+                    }
+                  },
+                  "Property": "Avg PO to Delivery Days"
+                }
+              },
+              "queryRef": "Fact_Shipments.Avg PO to Delivery Days",
+              "displayName": "Avg lead time (days)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Direct Drop vs From RDC'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

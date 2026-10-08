@@ -1,0 +1,44 @@
+relationship 45907bb8-7501-51cb-bf09-7162d53e6aa2
+	fromColumn: Fact_LineItems.Country
+	toColumn: Dim_Country.Country
+
+relationship bdcce199-2e25-5795-8aad-4d4637f8558e
+	fromColumn: Fact_LineItems.Vendor
+	toColumn: Dim_Vendor.Vendor
+
+relationship 08f13cef-1a13-5cc9-bbcf-4431817488bc
+	fromColumn: Fact_LineItems.'Shipment Mode'
+	toColumn: Dim_ShipmentMode.'Shipment Mode'
+
+relationship f6e5a496-4963-58e7-b2db-a119f44e61a4
+	fromColumn: Fact_LineItems.'Fulfill Via'
+	toColumn: Dim_FulfillVia.'Fulfill Via'
+
+relationship fa19ccb7-ae71-5b79-9178-b6a7ecf1dc6c
+	fromColumn: Fact_LineItems.'Delivered to Client Date'
+	toColumn: Dim_Date.Date
+
+relationship a9341e55-c639-59df-898b-4790c07061d0
+	fromColumn: Fact_Shipments.Country
+	toColumn: Dim_Country.Country
+
+relationship 72aadf65-5c4f-5085-93bf-74de42ed6f1d
+	fromColumn: Fact_Shipments.Vendor
+	toColumn: Dim_Vendor.Vendor
+
+relationship 9dddf2df-9605-577f-a58d-d728dd821a25
+	fromColumn: Fact_Shipments.'Shipment Mode'
+	toColumn: Dim_ShipmentMode.'Shipment Mode'
+
+relationship fa9cbcb8-447c-53b6-ba66-6ab86e8374e7
+	fromColumn: Fact_Shipments.'Fulfill Via'
+	toColumn: Dim_FulfillVia.'Fulfill Via'
+
+relationship 6bd60a72-ccc4-5675-b739-d2173931dd2c
+	fromColumn: Fact_Shipments.'Delivered to Client Date'
+	toColumn: Dim_Date.Date
+
+relationship e03b8fe5-1977-52fe-b5d6-efec03c8aa70
+	fromColumn: Fact_LineItems.'Item Description'
+	toColumn: Dim_Product.'Item Description'
+
